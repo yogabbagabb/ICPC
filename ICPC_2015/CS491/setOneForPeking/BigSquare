@@ -2,77 +2,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Collections;
+
 public class Main 
 {
-	
-	/*
-	 * Two functions exist: 
-	 * given a double array of multiple points and a coordinate corresponding to
-	 * a double array entry, one function identifies whether it has any promising square --
-	 * that is, the function determines whether by assuming the current coordinate to be a 
-	 * corner and adding another corner somewhere near
-	 * the current one, a square can be formed. If several of such squares exist, the function returns
-	 * the square corresponding to the one with maximum
-	 * 
-	 * How does this function work (accepts the parameters for a coordinate)
-	 * 
-	 * has its own list of PotentialSpots
-	 * has two micro functions: go right and go down
-	 * make these micro like functions (either imbedded into the method or their owntype)
-	 * 
-	 * whilst progressing in each direction, these micro-functions:
-	 * a) check for a compatible point and remember distance from the point to the starting point
-	 * b) move around in a square and determine whether at least one other such point exists; if it exists, 
-	 * the function return the position of the other point.
-	 * 
-	 * when iterating in a given direction, move so that the index >= 0
-	 * to detect whether hits in the other directions would work, use an if block and determine
-	 * whether a sum < the length of the array. if the sum isn't, just return 0 and continue onwards 
-	 * 
-	 * let's say that we have two points identified; we now need to identify whether the third and fourth would do us good.
-	 * to make that assessment, if the third point contains "J" then 
-	 * 
-	 * a) if the fourth point contains "J" then return the area of that square
-	 * b) if the fourth points contains "*" then return the area of that square
-	 * c) if the fourth point contains "B" then return 0;
-	 * 
-	 * if the third point contains "*"
-	 * if the fourth point contains "J" return the area of the square
-	 * if the fourth point contains "*" or "B" return 0;
-	 * 
-	 * if the third point contains "B"
-	 * return 0;
-	 * 
-	 * keep adding these potential points to the point
-	 * 
-	 * have the point search once done and return the max
-	 * 
-	 * we have several functions, consequently:
-	 * 
-	 * a sort function
-	 * a go right and bottom
-	 * a getPotentialPoint for each point
-	 * 
-	 *
-	 * 
-	 * the order of operations
-	 * 
-	 * initialize a scanner
-	 * determine the double array's dimensions
-	 * scan each element into the double array
-	 * use a double for loop
-	 * 
-	 * create a list of PotentialSpots
-	 * then iterate through the double array once again
-	 * pass in each coordinate into the function that determines optimum 
-	 * optimum locations
-	 * 
-	 * this function then takes the coordinate and goes down and left
-	 * find the mPotentialSpot with a maximum within the array of PotentialSpots;
-	 * once you've identified the maximum, return its value. It could be 0 for
-	 * all we know
-	 * 
-	 */
 	
 	public static String[][] coordinateArray;
 	public static final String KEY = "J";
@@ -99,7 +31,7 @@ public class Main
 		}
 		
 		
-		ArrayList<PotentialSpot> list = new ArrayList <PotentialSpot> ();
+		ArrayList<Integer> list = new ArrayList <Integer> ();
 		
 		for (int i = 0; i < size; i++)
 		{
@@ -109,30 +41,30 @@ public class Main
 			}
 		}
 		
-		System.out.println(Main.getListMax(list).area);
+		System.out.println(Main.getListMax(list));
 		
 	}
 	
-	public static PotentialSpot getOptimumLocation(int x, int y)
+	public static int getOptimumLocation(int x, int y)
 	{
-		ArrayList<PotentialSpot> list = new ArrayList <PotentialSpot> ();
+		ArrayList<Integer> list = new ArrayList <Integer> ();
 
 		list.add(Main.goRight(x, y));
 		list.add(Main.goDown(x, y));
-		list.add(Main.goLeft(x, y));
 		
 		return Main.getListMax(list);
 	}
 	
-	public static PotentialSpot goDown(int x, int y)
+	public static int goDown(int x, int y)
 	{
-		ArrayList<PotentialSpot> list = new ArrayList <PotentialSpot> ();
+		ArrayList<Integer> list = new ArrayList <Integer> ();
 		
 		if (coordinateArray[x][y].equals(KEY))
 			for (int i = x+1; i < coordinateArray.length; i++)
 			{
 				if (coordinateArray[i][y].equals(KEY))
 				{
+					// to the Right case
 					if (y + (i-x) < coordinateArray.length)
 					{
 						boolean condition = 
@@ -140,21 +72,44 @@ public class Main
 								&& (!coordinateArray[i][y+(i-x)].equals(ANTI_KEY) && !coordinateArray[x][y+(i-x)].equals(ANTI_KEY));
 						
 						if (condition)
-							list.add(new PotentialSpot(x,y,i,y+i-x,(int)Math.pow(i-x, 2)));
+							list.add((int)Math.pow(i-x, 2));
+						
+					}
+					
+					// to the Left case
+					if (y - (i-x) >= 0)
+					{
+						boolean condition =  
+								(coordinateArray[i][y-(i-x)].equals(KEY) || coordinateArray[x][y-(i-x)].equals(KEY))
+								&& (!coordinateArray[i][y-(i-x)].equals(ANTI_KEY) && !coordinateArray[x][y-(i-x)].equals(ANTI_KEY));
+						
+						if (condition)
+							list.add((int)Math.pow(i-x, 2));
+					}
+					
+					// diagonal case
+					if (y + (i-x)/2 < coordinateArray.length && y - (i-x)/2 >= 0 && (i-x)%2 == 0)
+					{
+						boolean condition = 
+								(coordinateArray[x+(i-x)/2][y + (i-x)/2].equals(KEY) || coordinateArray[x+(i-x)/2][y - (i-x)/2].equals(KEY))
+								&& (!coordinateArray[x+(i-x)/2][y + (i-x)/2].equals(ANTI_KEY) && !coordinateArray[x+(i-x)/2][y - (i-x)/2].equals(ANTI_KEY));
+						
+						if (condition)
+								list.add((int)(2*Math.pow((i-x)/2, 2)));
 						
 					}
 						
 				}
 			}
 			
-		return Main.getListMax(list, x, y);
+		return Main.getListMax(list);
 		
 	
 		
 	}
-	public static PotentialSpot goRight(int x, int y)
+	public static int goRight(int x, int y)
 	{
-		ArrayList<PotentialSpot> list = new ArrayList <PotentialSpot> ();
+		ArrayList<Integer> list = new ArrayList <Integer> ();
 		
 		if (coordinateArray[x][y].equals(KEY))
 			for (int i = y+1; i < coordinateArray.length; i++)
@@ -168,76 +123,43 @@ public class Main
 								&& (!coordinateArray[x+(i-y)][y].equals(ANTI_KEY) && !coordinateArray[x+(i-y)][i].equals(ANTI_KEY));
 						
 						if (condition)
-							list.add(new PotentialSpot(x,y,x+i-y,i,(int)Math.pow(i-y, 2)));
+							list.add((int)Math.pow(i-y, 2));
 						
+					}
+					
+					if ((i-y)%2 == 0 && x + (i-y)/2 < coordinateArray.length && x- (i-y)/2 >= 0)
+					{
+						boolean condition = 
+								(coordinateArray[x-(i-y)/2][y+(i-y)/2].equals(KEY) || coordinateArray[x+(i-y)/2][y+(i-y)/2].equals(KEY))
+								&& (!coordinateArray[x-(i-y)/2][y+(i-y)/2].equals(ANTI_KEY) && !coordinateArray[x+(i-y)/2][y+(i-y)/2].equals(ANTI_KEY));
+						
+						if (condition)
+							list.add((int)(2*Math.pow((i-y)/2, 2)));
+
 					}
 						
 				}
 			}
 			
 		
-		return Main.getListMax(list, x, y);
+		return Main.getListMax(list);
 		
 	
 		
 	}
 	
+
 	
-	public static PotentialSpot goLeft(int x, int y)
-	{
-		ArrayList<PotentialSpot> list = new ArrayList <PotentialSpot> ();
-		
-		if (coordinateArray[x][y].equals(KEY))
-			for (int i = x-1; i >= 0; i--)
-			{
-				if (coordinateArray[i][y].equals(KEY))
-				{
-					if (y - (x-i) >= 0)
-					{
-						boolean condition = 
-								(coordinateArray[i][y-(x-i)].equals(KEY) || coordinateArray[x][y-(x-i)].equals(KEY))
-								&& (!coordinateArray[i][y-(x-i)].equals(ANTI_KEY) && !coordinateArray[x][y-(x-i)].equals(ANTI_KEY));
-						
-						if (condition)
-							list.add(new PotentialSpot(x,y,i,y-(x-i),(int)Math.pow(x-i, 2)));
-						
-					}
-						
-				}
-			}
-		
-		
-		return Main.getListMax(list, x, y);
-		
-	}
-	
-	public static PotentialSpot getListMax(java.util.List <PotentialSpot> list, int x, int y)
+	public static int getListMax(java.util.List <Integer> list)
 	{
 		if (list.size() == 0)
-			return new PotentialSpot(x,y,x,y,0);
+			return 0;
 		
 		
-		PotentialSpot max = list.get(0);
-		for (PotentialSpot spot : list)
+		int max = list.get(0);
+		for (int spot : list)
 		{
-			if (spot.area > max.area)
-			{
-				max = spot;
-			}
-		}
-		return max;
-	}
-	
-	public static PotentialSpot getListMax(java.util.List <PotentialSpot> list)
-	{
-		if (list.size() == 0)
-			return new PotentialSpot(0,0,0,0,0);
-		
-		
-		PotentialSpot max = list.get(0);
-		for (PotentialSpot spot : list)
-		{
-			if (spot.area > max.area)
+			if (spot > max)
 			{
 				max = spot;
 			}
@@ -249,20 +171,4 @@ public class Main
 }
 
 
-class PotentialSpot
-{
-	public int x, y;
-	public int xo, yo;
-	public int area;
-	
-	public PotentialSpot(int a, int b, int c, int d, int e)
-	{
-		x = a;
-		y = b;
-		xo = c;
-		yo = d;
-		area = e;
-	}
 
-	
-}

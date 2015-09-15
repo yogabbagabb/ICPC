@@ -171,20 +171,3 @@ public class BigSquare
 }
 
 
-class PotentialSpot
-{
-	public int x, y;
-	public int xo, yo;
-	public int area;
-	
-	public PotentialSpot(int a, int b, int c, int d, int e)
-	{
-		x = a;
-		y = b;
-		xo = c;
-		yo = d;
-		area = e;
-	}
-
-	
-}
