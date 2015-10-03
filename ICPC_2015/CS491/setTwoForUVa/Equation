@@ -1,6 +1,4 @@
-package setTwo;
-
-public class Equation {
+public class Main {
 
 	
 	public static void main (String[]args)
@@ -28,7 +26,7 @@ public class Equation {
 					{
 						equationList.add(0,stack.pop());
 					}
-					String reAdd = Equation.processEquation(equationList);
+					String reAdd = Main.processEquation(equationList);
 					// remove parentheses '('
 					stack.pop();
 					stack.push(reAdd);
@@ -44,8 +42,8 @@ public class Equation {
 				equationList.add(0,stack.pop());
 			}
 			
-	//		equationList = Equation.orderByPrecedence(equationList);
-			System.out.println(Equation.processEquation(equationList));
+	//		equationList = Main.orderByPrecedence(equationList);
+			System.out.println(Main.processEquation(equationList));
 			System.out.println();
 			equationList.clear();
 		}
@@ -71,7 +69,7 @@ public class Equation {
 			}
 		}
 		
-//		firstRound = Equation.orderByPrecedence(firstRound);
+//		firstRound = Main.orderByPrecedence(firstRound);
 		
 		java.util.ArrayList <String> finalRound = new java.util.ArrayList<String> ();
 		i = 0;
@@ -105,7 +103,7 @@ public class Equation {
 		// if the first index is a postfix, tis fine
 		for (int i = 0 + 1; i < list.size(); i++)
 		{
-			if (Equation.isAPostFix(list.get(i)))
+			if (Main.isAPostFix(list.get(i)))
 			{
 				finalList.add(list.get(i));
 				list.remove(i);

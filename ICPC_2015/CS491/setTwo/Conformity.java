@@ -36,15 +36,23 @@ public class Conformity {
 			
 
 			int maxValue = 1;
+			int numOccurences = 1;
 			for (java.util.Map.Entry<String, Integer> entry: combinations.entrySet())
 			{
 				if (entry.getValue() > maxValue)
 				{
 					maxValue = entry.getValue();
+					numOccurences = 1;
+				}
+				else if (entry.getValue() == maxValue)
+				{
+					numOccurences++;
 				}
 			}
 			
-			System.out.println(maxValue);
+			System.out.println(numOccurences * maxValue);
+			
+			
 		}
 	}
 	
