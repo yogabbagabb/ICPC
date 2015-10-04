@@ -1,9 +1,7 @@
-package setFour;
-
 import java.util.Arrays;
 
 
-public class BetterCowMarathonTwo
+public class Main
 {
 	
 
@@ -12,6 +10,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 
 
 	public static void main (String[]args)
+
 	{
 
 		java.util.Scanner stdin = new java.util.Scanner (System.in);
@@ -27,6 +26,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 		}
 
 		while (measurements > 0)
+
 		{
 
 			int firstCow = stdin.nextInt() - 1;
@@ -56,7 +56,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 		
 		for (int i = 0; i < farms; i++)
 		{
-			BetterCowMarathonTwo.findDistances(finalDistances, i, i, "", new boolean[farms]);
+			Main.findDistances(finalDistances, i, i, "");
 			visitedList.clear();
 			for (int j = 0; j < farms; j++)
 			{
@@ -68,7 +68,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 		for (int i = 0; i < finalDistances.size(); i++)
 		{
 
-			d[i] = BetterCowMarathonTwo.processDistance(finalDistances.get(i));
+			d[i] = Main.processDistance(finalDistances.get(i));
 
 		}
 
@@ -86,16 +86,22 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 
 	}
 
-	public static void findDistances(java.util.List<String> finalDistances, int lastIndex, int cowIndex, String developingDistance, boolean[] alreadyVisited)
+	public static void findDistances(java.util.List<String> finalDistances, int lastIndex, int cowIndex, String developingDistance)
 	{
 
 		java.util.LinkedList<String> thisCowList = cowList.get(cowIndex);
+		boolean [] alreadyVisited = visitedList.get(cowIndex);
 		alreadyVisited[lastIndex] = true;
 		
 		boolean allVisited = true;
 		
 		for(String cowInfo: thisCowList)
 		{
+			java.util.List<boolean[]> snapShot = new java.util.ArrayList<boolean[]> ();
+			for (boolean[] array: visitedList)
+			{
+				snapShot.add(array.clone());
+			}
 			
 			String newDevelopingDistance = developingDistance;
 			int possibleCow = Integer.parseInt(cowInfo.substring(0, 1));
@@ -105,18 +111,35 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 				allVisited = false;
 				newDevelopingDistance += cowInfo.substring(1) + " ";
 				alreadyVisited[possibleCow] = true;
-				BetterCowMarathonTwo.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance, alreadyVisited);
+				Main.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance);
 			}
+			
+			visitedList = snapShot;
 
 		}
 
 		if (allVisited)
+
 		{
 			finalDistances.add(developingDistance);
 		}
 
 	}
 	
+//	public static void storeSnapshot(java.util.List<boolean[]> aVisitedList)
+//	{
+//		snapShot.clear();
+//		for (boolean[] array: aVisitedList)
+//		{
+//			snapShot.add(array.clone());
+//		}
+//	}
+//	
+//	public static java.util.List<boolean[]> getSnapshot()
+//	{
+//		return snapShot;
+//	}
+
 	public static int processDistance(String s)
 	{
 
