@@ -36,6 +36,7 @@ public class Conformity {
 			
 
 			int maxValue = 1;
+<<<<<<< HEAD
 			int numOccurences = 1;
 			for (java.util.Map.Entry<String, Integer> entry: combinations.entrySet())
 			{
@@ -53,6 +54,17 @@ public class Conformity {
 			System.out.println(numOccurences * maxValue);
 			
 			
+=======
+			for (java.util.Map.Entry<String, Integer> entry: combinations.entrySet())
+			{
+				if (entry.getValue() > maxValue)
+				{
+					maxValue = entry.getValue();
+				}
+			}
+			
+			System.out.println(maxValue);
+>>>>>>> branch 'master' of https://github.com/yogabbagabb/ICPC_2015
 		}
 	}
 	

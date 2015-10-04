@@ -72,6 +72,59 @@ public class Equation {
 		}
 		
 //		firstRound = Equation.orderByPrecedence(firstRound);
+		String next = "";
+		while (!(next = stdin.next()).equals("a"))	
+		{
+			if (!next.equals(")"))
+			{
+				stack.push(next);
+			}
+			else
+			{
+				while (!stack.peek().equals("("))
+				{
+					equationList.add(0,stack.pop());
+				}
+				String reAdd = Equation.processEquation(equationList);
+				// remove parentheses '('
+				stack.pop();
+				stack.push(reAdd);
+				equationList.clear();
+			}
+		}
+		
+		
+		while (!stack.isEmpty())
+		{
+			equationList.add(0,stack.pop());
+		}
+		
+		equationList = Equation.orderByPrecedence(equationList);
+		System.out.println(Equation.processEquation(equationList));
+	}
+	
+//	public static String processEquation(java.util.List <String> equation)
+//	{
+//		java.util.ArrayList <String> firstRound = new java.util.ArrayList<String> ();
+//	
+//		int i = 0;
+//		while (i < equation.size())
+//		{
+//			if (equation.get(i).equals("*") || equation.get(i).equals("/"))
+//			{
+//				String previous = firstRound.remove(firstRound.size()-1);
+//				firstRound.add(previous + equation.get(i+1) + equation.get(i));
+//				i += 2;
+//			}
+//			else
+//			{
+//				firstRound.add(equation.get(i));
+//				i++;
+//			}
+//		}
+//		
+//		firstRound = Equation.orderByPrecedence(firstRound);
+//>>>>>>> branch 'master' of https://github.com/yogabbagabb/ICPC_2015
 		
 		java.util.ArrayList <String> finalRound = new java.util.ArrayList<String> ();
 		i = 0;

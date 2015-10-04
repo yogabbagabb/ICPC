@@ -1,7 +1,6 @@
 package setFour;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 
 public class BetterCowMarathonTwo
@@ -10,11 +9,9 @@ public class BetterCowMarathonTwo
 
 public static java.util.List<java.util.LinkedList<String>> cowList = new java.util.ArrayList<java.util.LinkedList<String>> ();
 public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<boolean[]> ();
-public static java.util.List<boolean[]> snapShot = new java.util.ArrayList<boolean[]> ();
 
 
 	public static void main (String[]args)
-
 	{
 
 		java.util.Scanner stdin = new java.util.Scanner (System.in);
@@ -30,7 +27,6 @@ public static java.util.List<boolean[]> snapShot = new java.util.ArrayList<boole
 		}
 
 		while (measurements > 0)
-
 		{
 
 			int firstCow = stdin.nextInt() - 1;
@@ -101,7 +97,12 @@ public static java.util.List<boolean[]> snapShot = new java.util.ArrayList<boole
 		
 		for(String cowInfo: thisCowList)
 		{
-			BetterCowMarathonTwo.storeSnapshot(visitedList);
+			java.util.List<boolean[]> snapShot = new java.util.ArrayList<boolean[]> ();
+			for (boolean[] array: visitedList)
+			{
+				snapShot.add(array.clone());
+			}
+			
 			String newDevelopingDistance = developingDistance;
 			int possibleCow = Integer.parseInt(cowInfo.substring(0, 1));
 			
@@ -112,31 +113,18 @@ public static java.util.List<boolean[]> snapShot = new java.util.ArrayList<boole
 				alreadyVisited[possibleCow] = true;
 				BetterCowMarathonTwo.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance);
 			}
+			
+			visitedList = snapShot;
 
 		}
 
 		if (allVisited)
-
 		{
 			finalDistances.add(developingDistance);
 		}
 
 	}
 	
-	public static void storeSnapshot(java.util.List<boolean[]> aVisitedList)
-	{
-		snapShot.clear();
-		for (boolean[] array: aVisitedList)
-		{
-			snapShot.add(array.clone());
-		}
-	}
-	
-	public static java.util.List<boolean[]> getSnapshot()
-	{
-		return snapShot;
-	}
-
 	public static int processDistance(String s)
 	{
 

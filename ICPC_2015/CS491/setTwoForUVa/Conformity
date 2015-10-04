@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package setTwo;
 
 public class Main {
@@ -53,6 +54,53 @@ public class Main {
 			System.out.println(numOccurences * maxValue);
 			
 			
+=======
+public class Main {
+	
+	public static void main(String[]args)
+	{
+		java.util.Scanner stdin = new java.util.Scanner (System.in);
+		int nums;
+		while ((nums = stdin.nextInt()) != 0)
+		{
+			java.util.HashMap<String, Integer> combinations = new java.util.HashMap<String,Integer> ();
+			
+			
+			for (int i = 0; i < nums; i++)
+			{
+				String[] array = new String[5];
+				for (int j = 0; j < 5; j++)
+				{
+					array[j] = stdin.next();
+				}
+				
+				Main.sortStringArray(array);
+				String combination = Main.getCombination(array);
+				
+				int value = 1;
+				if (!combinations.containsKey(combination))
+				{
+					combinations.put(combination, value);
+				}
+				else
+				{
+					combinations.put(combination, combinations.get(combination) + 1);
+				}
+			}
+			
+			
+
+			int maxValue = 1;
+			for (java.util.Map.Entry<String, Integer> entry: combinations.entrySet())
+			{
+				if (entry.getValue() > maxValue)
+				{
+					maxValue = entry.getValue();
+				}
+			}
+			
+			System.out.println(maxValue);
+>>>>>>> branch 'master' of https://github.com/yogabbagabb/ICPC_2015
 		}
 	}
 	
