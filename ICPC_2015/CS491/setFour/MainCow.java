@@ -3,7 +3,7 @@ package setFour;
 import java.util.Arrays;
 
 
-public class BetterCowMarathonTwo
+public class Main
 {
 	
 
@@ -46,7 +46,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 		
 		for (int i = 0; i < farms; i++)
 		{
-			BetterCowMarathonTwo.findDistances(finalDistances, i, i, "", new boolean[farms]);
+			Main.findDistances(finalDistances, i, i, "", new boolean[farms]);
 			visitedList.clear();
 			for (int j = 0; j < farms; j++)
 			{
@@ -58,7 +58,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 		for (int i = 0; i < finalDistances.size(); i++)
 		{
 
-			d[i] = BetterCowMarathonTwo.processDistance(finalDistances.get(i));
+			d[i] = Main.processDistance(finalDistances.get(i));
 
 		}
 
@@ -92,7 +92,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 				allVisited = false;
 				newDevelopingDistance += cowInfo.substring(1) + " ";
 				alreadyVisited[possibleCow] = true;
-				BetterCowMarathonTwo.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance, alreadyVisited);
+				Main.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance, alreadyVisited);
 			}
 
 		}
