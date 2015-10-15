@@ -1,0 +1,98 @@
+package setFive;
+
+public class ToTheMax {
+	
+	public static int[][] storage;
+	public static java.util.HashMap<Integer, Integer> memory = new java.util.HashMap<Integer,Integer> ();
+	
+	public static void main (String[]args)
+	{
+		java.util.Scanner stdin = new java.util.Scanner(System.in);
+		int N = stdin.nextInt();
+		stdin.nextLine();
+		
+		storage = new int[N][N];
+		
+		for (int i = 0; i < N; i++)
+		{
+			for (int j = 0; j < N; j++)
+			{
+				storage[i][j] = stdin.nextInt();
+			}
+		}
+		
+//		for (int[] array: storage)
+//		{
+//			System.out.println(java.util.Arrays.toString(array));
+//		}
+		
+		System.out.println(ToTheMax.findRectangle(0, N-1, 0, N-1));
+//		System.out.println(memory);
+	}
+	
+	public static int findRectangle(int x1, int x2, int y1, int y2)
+	{
+		if (x2 < 0 || y2 < 0)
+		{
+			return 0;
+		}
+		
+		int memoryL = (int)(Math.pow(storage.length + 1, y2 + 1) + (x2 + 1));
+		if (memory.containsKey(memoryL))
+		{
+			return memory.get(memoryL);
+		}
+		
+		int width = x2 - x1 + 1;
+		int length = y2 - y1 + 1;
+		if (x2 - x1 == 0)
+			width = 1;
+		if (y2 - y1 == 0)
+			length = 1;
+		
+		int[] sum = new int[width * length];
+		
+		int count = 0;
+		for (int  i = x1; i <= x2; i++)
+		{
+			for (int j = y1; j <= y2; j++)
+			{
+				sum[count] = ToTheMax.getArea(i, x2, j, y2);
+				count++;
+			}
+		}
+		
+		int max = sum[0];
+		for (int i = 1; i < sum.length; i++)
+		{
+			if (sum[i] > max)
+			{
+				max = sum[i];
+			}
+		}
+		
+
+		memory.put(memoryL, max);
+		
+		int leftSmall = ToTheMax.findRectangle(x1, x2-1, y1, y2);
+		int upSmall = ToTheMax.findRectangle(x1, x2, y1, y2-1);
+
+		return (Math.max(Math.max(leftSmall, upSmall),max));
+		
+	}
+	
+	public static int getArea(int x1, int x2, int y1, int y2)
+	{
+		int sum = 0;
+		for (int i = x1; i <= x2; i++)
+		{
+			for (int j = y1; j <= y2; j++)
+			{
+				sum += storage[i][j];
+			}
+		}
+		
+		return sum;
+	}
+
+}

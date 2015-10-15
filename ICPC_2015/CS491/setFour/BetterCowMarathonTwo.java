@@ -1,20 +1,21 @@
 package setFour;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
 
 
 public class BetterCowMarathonTwo
 {
 	
-
-public static java.util.List<java.util.LinkedList<String>> cowList = new java.util.ArrayList<java.util.LinkedList<String>> ();
-public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<boolean[]> ();
-
-
+	public static List<LinkedList<String>> cowList = new ArrayList<LinkedList<String>> ();
 	public static void main (String[]args)
 	{
-
-		java.util.Scanner stdin = new java.util.Scanner (System.in);
+		Scanner stdin = new Scanner (System.in);
 
 		int farms = stdin.nextInt();
 		int measurements = stdin.nextInt();
@@ -22,8 +23,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 		for (int i = 0; i < farms; i++)
 
 		{
-			cowList.add(new java.util.LinkedList<String> ());
-			visitedList.add(new boolean[farms]);
+			cowList.add(new LinkedList<String> ());
 		}
 
 		while (measurements > 0)
@@ -42,57 +42,40 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 
 		}
 
-		java.util.ArrayList<String> finalDistances = new java.util.ArrayList<String> ();
+		ArrayList<Integer> finalDistances = new ArrayList<Integer> ();
 		
 		for (int i = 0; i < farms; i++)
 		{
-			BetterCowMarathonTwo.findDistances(finalDistances, i, i, "", new boolean[farms]);
-			visitedList.clear();
-			for (int j = 0; j < farms; j++)
-			{
-				visitedList.add(new boolean[farms]);
-			}
+			BetterCowMarathonTwo.findDistances(finalDistances, i, i, 0, new boolean[farms],true);
 		}
 		
-		int[] d = new int[finalDistances.size()];
-		for (int i = 0; i < finalDistances.size(); i++)
-		{
-
-			d[i] = BetterCowMarathonTwo.processDistance(finalDistances.get(i));
-
-		}
-
-		int max = d[0];
-		for (int i = 1; i < d.length; i++)
-		{
-			if (d[i] > max)
-				max = d[i];
-		}
+		System.out.println(Collections.max(finalDistances));
 		
-		System.out.println(max);
 
 	}
 
-	public static void findDistances(java.util.List<String> finalDistances, int lastIndex, int cowIndex, String developingDistance, boolean[] alreadyVisited)
+	public static void findDistances(List<Integer> finalDistances, int lastIndex, int cowIndex, int developingDistance, boolean[] alreadyVisited, boolean firstTime)
 	{
 
-		java.util.LinkedList<String> thisCowList = cowList.get(cowIndex);
-		alreadyVisited[lastIndex] = true;
+		LinkedList<String> thisCowList = cowList.get(cowIndex);
+		
+		if (!firstTime)
+			alreadyVisited[lastIndex] = true;
 		
 		boolean allVisited = true;
 		
 		for(String cowInfo: thisCowList)
 		{
 			
-			String newDevelopingDistance = developingDistance;
+			int newDevelopingDistance = developingDistance;
 			int possibleCow = Integer.parseInt(cowInfo.substring(0, 1));
 			
 			if (alreadyVisited[possibleCow] == false)
 			{
 				allVisited = false;
-				newDevelopingDistance += cowInfo.substring(1) + " ";
+				newDevelopingDistance += Integer.parseInt(cowInfo.substring(2));
 				alreadyVisited[possibleCow] = true;
-				BetterCowMarathonTwo.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance, alreadyVisited);
+				BetterCowMarathonTwo.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance, alreadyVisited, false);
 			}
 
 		}
@@ -108,7 +91,7 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 	{
 
 		int total = 0;
-		java.util.StringTokenizer tokenizer = new java.util.StringTokenizer(s);
+		StringTokenizer tokenizer = new StringTokenizer(s);
 
 		while (tokenizer.hasMoreTokens())
 		{

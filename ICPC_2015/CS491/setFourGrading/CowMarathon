@@ -1,16 +1,20 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+
 
 public class Main
 {
 	
-
-public static java.util.List<java.util.LinkedList<String>> cowList = new java.util.ArrayList<java.util.LinkedList<String>> ();
-public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<boolean[]> ();
-
-
+	public static List<LinkedList<String>> cowList = new ArrayList<LinkedList<String>> ();
+	int x = 1;
 	public static void main (String[]args)
 	{
-
-		java.util.Scanner stdin = new java.util.Scanner (System.in);
+		Scanner stdin = new Scanner (System.in);
 
 		int farms = stdin.nextInt();
 		int measurements = stdin.nextInt();
@@ -18,12 +22,10 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 		for (int i = 0; i < farms; i++)
 
 		{
-			cowList.add(new java.util.LinkedList<String> ());
-			visitedList.add(new boolean[farms]);
+			cowList.add(new LinkedList<String> ());
 		}
 
 		while (measurements > 0)
-
 		{
 
 			int firstCow = stdin.nextInt() - 1;
@@ -31,100 +33,62 @@ public static java.util.List<boolean[]> visitedList = new java.util.ArrayList<bo
 			int distance = stdin.nextInt();
 
 			String direction = stdin.next();
-			String secondDirection = "";
-			
-			if (direction.equals("E"))
-				secondDirection = "W";
-			else if (direction.equals("W"))
-				secondDirection = "E";
-			else if (direction.equals("N"))
-				secondDirection = "S";
-			else if (direction.equals("S"))
-				secondDirection = "N";
 			
 			cowList.get(firstCow).add(secondCow + direction + distance);
-			cowList.get(secondCow).add(firstCow + secondDirection + distance);
+			cowList.get(secondCow).add(firstCow + direction + distance);
 			
 			measurements--;
 
 		}
 
-		java.util.ArrayList<String> finalDistances = new java.util.ArrayList<String> ();
+		ArrayList<Integer> finalDistances = new ArrayList<Integer> ();
 		
 		for (int i = 0; i < farms; i++)
 		{
-			Main.findDistances(finalDistances, i, i, "");
-			visitedList.clear();
-			for (int j = 0; j < farms; j++)
-			{
-				visitedList.add(new boolean[farms]);
-			}
+			Main.findDistances(finalDistances, i, i, 0, new boolean[farms]);
 		}
 		
-		int[] d = new int[finalDistances.size()];
-		for (int i = 0; i < finalDistances.size(); i++)
-		{
-
-			d[i] = Main.processDistance(finalDistances.get(i));
-
-		}
-
-		int max = d[0];
-		for (int i = 1; i < d.length; i++)
-		{
-			if (d[i] > max)
-				max = d[i];
-		}
+		System.out.println(Collections.max(finalDistances));
 		
-		System.out.println(max);
 
 	}
 
-	public static void findDistances(java.util.List<String> finalDistances, int lastIndex, int cowIndex, String developingDistance)
+	public static void findDistances(List<Integer> finalDistances, int lastIndex, int cowIndex, int developingDistance, boolean[] alreadyVisited)
 	{
 
-		java.util.LinkedList<String> thisCowList = cowList.get(cowIndex);
-		boolean [] alreadyVisited = visitedList.get(cowIndex);
+		LinkedList<String> thisCowList = cowList.get(cowIndex);
 		alreadyVisited[lastIndex] = true;
 		
 		boolean allVisited = true;
 		
 		for(String cowInfo: thisCowList)
 		{
-			java.util.List<boolean[]> snapShot = new java.util.ArrayList<boolean[]> ();
-			for (boolean[] array: visitedList)
-			{
-				snapShot.add(array.clone());
-			}
 			
-			String newDevelopingDistance = developingDistance;
+			int newDevelopingDistance = developingDistance;
 			int possibleCow = Integer.parseInt(cowInfo.substring(0, 1));
 			
 			if (alreadyVisited[possibleCow] == false)
 			{
 				allVisited = false;
-				newDevelopingDistance += cowInfo.substring(1) + " ";
+				newDevelopingDistance += Integer.parseInt(cowInfo.substring(2));
 				alreadyVisited[possibleCow] = true;
-				Main.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance);
+				Main.findDistances(finalDistances, cowIndex, possibleCow, newDevelopingDistance, alreadyVisited);
 			}
-			
-			visitedList = snapShot;
 
 		}
 
 		if (allVisited)
-
 		{
 			finalDistances.add(developingDistance);
 		}
 
 	}
-
+	
 	public static int processDistance(String s)
 	{
 
 		int total = 0;
-		java.util.StringTokenizer tokenizer = new java.util.StringTokenizer(s);
+		StringTokenizer tokenizer = new StringTokenizer(s);
 
 		while (tokenizer.hasMoreTokens())
 		{
